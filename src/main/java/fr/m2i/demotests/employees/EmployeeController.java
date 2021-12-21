@@ -3,6 +3,7 @@ package fr.m2i.demotests.employees;
 import fr.m2i.demotests.employees.dtos.EmployeeDTO;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,6 @@ public class EmployeeController {
 
     @Autowired
     private EmployeeService service;
-
 
     @GetMapping
     public List<EmployeeDTO> findAll() {
@@ -36,7 +36,7 @@ public class EmployeeController {
     @PostMapping
     public ResponseEntity<EmployeeDTO> save(@RequestBody EmployeeDTO employeeDTO){
         EmployeeDTO response = this.service.save(employeeDTO);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping
@@ -45,7 +45,7 @@ public class EmployeeController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping
+    @DeleteMapping
     public ResponseEntity<Boolean> delete(@RequestBody EmployeeDTO employeeDTO){
         this.service.delete(employeeDTO);
         return ResponseEntity.ok(true);

@@ -3,14 +3,15 @@ package fr.m2i.demotests.employees;
 import fr.m2i.demotests.employees.dtos.EmployeeDTO;
 import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class EmployeeService {
 
-    EmployeeRepository repository;
-    ModelMapper mapper;
+    private EmployeeRepository repository;
+    private ModelMapper mapper;
 
     public EmployeeService(EmployeeRepository repository, ModelMapper mapper) {
         this.repository = repository;
@@ -19,10 +20,16 @@ public class EmployeeService {
 
     /**
      * Retourne une liste d'employés
-     * @return List <Employee>
+     * @return List <EmployeeDTO>
      */
-    public List<Employee> findAll () {
-        return this.repository.findAll();
+    public List<EmployeeDTO> findAll () {
+        List<EmployeeDTO> employeeDTOList = new ArrayList<>();
+        this.repository.findAll().forEach(
+                employee -> {
+                    employeeDTOList.add(mapper.map(employee, EmployeeDTO.class));
+                }
+        );
+        return employeeDTOList;
     }
 
 
